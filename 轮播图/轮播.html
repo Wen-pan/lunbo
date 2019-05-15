@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			ul{
+				list-style: none;
+			}
+			a{
+				text-decoration: none;
+			}
+			.banner{
+				position: relative;
+				width:768px;
+				height: 432px;
+				margin: 200px auto;
+				/* overflow: hidden; */
+			}
+			.swiper{
+				position: absolute;
+				top:0;
+				left: 0;
+				width:600%;
+				height:100%;
+			}
+			.slide{
+				float: left;
+				width:768px;
+				height: 432px;
+			}
+			.slide img{
+				width: 100%;
+				height: 100%;
+			}
+			.btn{
+				display: block;
+				position: absolute;
+				top: 50%;
+				left:0;
+				width:60px;
+				height: 100px;
+				font-size: 50px;
+				text-align: center;
+				line-height: 100px;
+				margin-top:-36px;
+				background-color: rgba(0,0,0,.2);
+			}
+			.btn:hover{
+				background-color: rgba(0,0,0,.8);
+			}
+			.btn-right{
+				left: auto;
+				right: 0;
+			}
+			.banner .xuhao{
+				position: absolute;
+				bottom:0;
+				right: 0;
+				height: 50px;
+			}
+			.xuhao>li{
+				float: left;
+				width:30px;
+				height:30px;
+				text-align: center;
+				line-height:30px;
+				font-size: 20px;
+				margin-left: 20px;
+				border:1px solid black;
+				background-color: #FFFFFF;
+				cursor: pointer;
+			}
+			.xuhao .active{
+				background-color: orange;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="banner">
+			<ul class="swiper">
+				<li class="slide">
+					<img src="imgs/1.jpg">
+				</li>
+				<li class="slide">
+					<img src="imgs/2.jpg">
+				</li>
+				<li class="slide">
+					<img src="imgs/3.jpg">
+				</li>
+				<li class="slide">
+					<img src="imgs/4.jpg">
+				</li>
+				<li class="slide">
+					<img src="imgs/5.jpg">
+				</li>
+				<li class="slide">
+					<img src="imgs/1.jpg">
+				</li>
+			</ul>
+			<a class="btn btn-left" href="#">&lt;</a>
+			<a class="btn btn-right" href="#">&gt;</a>
+			<ul class="xuhao">
+				<li class="active">1</li>
+				<li>2</li>
+				<li>3</li>
+				<li>4</li>
+				<li>5</li>
+			</ul>
+		</div>
+		<script type="text/javascript">
+			//必要变量
+			var banner = document.querySelector('.banner');
+			var swiper = document.querySelector('.swiper');
+			var lis = document.querySelectorAll('.banner .swiper .slide');
+			var btnleft = document.querySelector('.btn-left');
+			var btnright = document.querySelector('.btn-right');
+			var btn = document.querySelectorAll('.banner .btn');
+			var xuhao = document.querySelector('.banner .xuhao')
+			//小点
+			var number = xuhao.children;
+			var liswidth = lis[0].offsetWidth;
+			//计数器
+			var count = 0;
+			var timer;
+			
+			
+			//小点
+			for(var i = 0;i < number.length;i ++){
+				number[i].onclick=function(){
+					var active = document.querySelector('.active');
+				}
+			}
+			
+			//右边按钮
+			btnright.onclick=function(){
+				if(count == lis.length-1){
+					count = 0;
+					swiper.style.left =0+'px';
+				}
+				count++;
+				var target = -1 * count * liswidth;
+				animte(swiper,target)
+			}
+			
+			//左边按钮
+			btnleft.onclick=function(){
+				if(count < 1){
+					count = lis.length-1;
+					swiper.style.left = -1 * count * liswidth+'px';
+				}
+				count--;
+				var target = -1 * count * liswidth;
+				animte(swiper,target);
+			}
+				
+				
+			//自动	
+			autoplay();
+			function autoplay(){
+				timer=setInterval(function(){
+					if(count == lis.length-1){
+						count = 0;
+						swiper.style.left = 0+'px';
+					}
+					count++;
+					var target = -1 * count * liswidth;
+					animte(swiper,target);
+				},2000)
+			}
+			
+			//鼠标经过
+			banner.onmouseenter=function(){
+				clearInterval(timer);
+				btnleft.style.display= 'block';
+				btnright.style.display= 'block';
+			};
+			//鼠标离开
+			banner.onmouseleave=function(){
+				autoplay();
+				btnleft.style.display= 'none';
+				btnright.style.display= 'none';
+			}
+			
+			
+			//动画函数
+			function animte(el,target){	
+				//每次进来清除定时器
+				clearInterval(el.timer);
+				el.timer=setInterval(function(){
+					//起点
+					var current = el.offsetLeft;
+					// console.log(current)
+					//步数
+					var step = (target - current)/10;
+					if(Math.abs(step) < 1){
+						step = step > 0 ? 1 : -1; 
+					}
+					//当前位置
+					current+=step;
+					el.style.left = current+'px';
+					if(current == target){
+						clearInterval(el.timer);
+					}
+				},17)
+			}
+		</script>
+	</body>
+</html>
